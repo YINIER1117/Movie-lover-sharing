@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Site - Movie Lover Sharing</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Montserrat & Noto Sans TC -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cinema: {
+                            bg: '#0F1115',
+                            card: '#181B22',
+                            gold: '#E5A93C',
+                            goldHover: '#F5BC53',
+                            red: '#E50914',
+                            text: '#E2E8F0',
+                            muted: '#94A3B8',
+                            border: '#2A2F3D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', '"Montserrat"', 'sans-serif'],
+                        heading: ['"Montserrat"', '"Noto Sans TC"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0F1115;
+            color: #E2E8F0;
+            background-image: radial-gradient(rgba(229, 169, 60, 0.05) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        /* Cinema Film Strip Effect */
+        .film-border-top {
+            background: repeating-linear-gradient(
+                90deg,
+                #181B22,
+                #181B22 15px,
+                #0F1115 15px,
+                #0F1115 25px
+            );
+        }
+
+        /* Ticket Stub Effect */
+        .ticket-card {
+            background: #181B22;
+            border: 1px solid #2A2F3D;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .ticket-card:hover {
+            transform: translateY(-5px);
+            border-color: #E5A93C;
+            box-shadow: 0 12px 30px -10px rgba(229, 169, 60, 0.25);
+        }
+
+        /* Golden Badge Tag */
+        .cinema-badge {
+            background: rgba(229, 169, 60, 0.15);
+            color: #E5A93C;
+            border: 1px solid rgba(229, 169, 60, 0.3);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0F1115;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2A2F3D;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #E5A93C;
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen flex flex-col justify-between selection:bg-cinema-gold selection:text-cinema-bg">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-50 bg-cinema-card/90 backdrop-blur-md border-b border-cinema-border">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-3 group">
+                <span class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cinema-gold to-yellow-200 text-cinema-bg flex items-center justify-center font-black text-xl shadow-lg group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-film"></i>
+                </span>
+                <div>
+                    <span class="text-xl font-extrabold font-heading tracking-wider bg-gradient-to-r from-white via-slate-200 to-cinema-gold bg-clip-text text-transparent block">MY SITE</span>
+                    <span class="text-[10px] text-cinema-gold font-semibold tracking-widest uppercase block -mt-1">Movie Lover Sharing</span>
+                </div>
+            </a>
+            
+            <nav class="hidden md:flex items-center gap-8 font-medium text-sm">
+                <a href="#featured" class="hover:text-cinema-gold transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-fire text-cinema-gold"></i> 熱門焦點
+                </a>
+                <a href="#reviews" class="hover:text-cinema-gold transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-clapperboard text-cinema-gold"></i> 深度影評
+                </a>
+                <a href="#watchlist" class="hover:text-cinema-gold transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-bookmark text-cinema-gold"></i> 推薦片單
+                </a>
+                <a href="#about" class="hover:text-cinema-gold transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-user text-cinema-gold"></i> 關於影迷
+                </a>
+            </nav>
+
+            <button onclick="toggleMobileMenu()" class="md:hidden text-cinema-muted hover:text-white text-2xl focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-cinema-card border-t border-cinema-border px-6 py-4 flex flex-col gap-4 font-medium text-sm">
+            <a href="#featured" onclick="toggleMobileMenu()" class="hover:text-cinema-gold flex items-center gap-2"><i class="fa-solid fa-fire text-cinema-gold"></i> 熱門焦點</a>
+            <a href="#reviews" onclick="toggleMobileMenu()" class="hover:text-cinema-gold flex items-center gap-2"><i class="fa-solid fa-clapperboard text-cinema-gold"></i> 深度影評</a>
+            <a href="#watchlist" onclick="toggleMobileMenu()" class="hover:text-cinema-gold flex items-center gap-2"><i class="fa-solid fa-bookmark text-cinema-gold"></i> 推薦片單</a>
+            <a href="#about" onclick="toggleMobileMenu()" class="hover:text-cinema-gold flex items-center gap-2"><i class="fa-solid fa-user text-cinema-gold"></i> 關於影迷</a>
+        </div>
+    </header>
+
+    <!-- Hero Banner with Cinematic Photo -->
+    <section class="max-w-6xl mx-auto px-4 mt-8 w-full">
+        <div class="relative rounded-3xl overflow-hidden border border-cinema-border shadow-2xl bg-gradient-to-r from-black via-cinema-card to-transparent">
+            <!-- Background Real Movie Theater Image -->
+            <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=80" 
+                 alt="Cinema Theater Background" 
+                 class="absolute inset-0 w-full h-full object-cover opacity-35 mix-blend-overlay"
+                 onerror="this.onerror=null; this.src='https://placehold.co/1600x600/181B22/E5A93C?text=🎬+Movie+Lover';">
+            <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-cinema-bg via-cinema-bg/90 to-transparent"></div>
+
+            <div class="relative z-10 p-8 md:p-12 max-w-2xl space-y-5">
+                <div class="cinema-badge">
+                    <i class="fa-solid fa-ticket"></i> MOVIE LOVER COMMUNITY
+                </div>
+                <h1 class="text-3xl md:text-5xl font-black font-heading tracking-tight leading-tight text-white">
+                    穿梭光影之間，<br><span class="text-cinema-gold">尋找靈魂共鳴的影評時光</span>
+                </h1>
+                <p class="text-cinema-muted text-sm md:text-base leading-relaxed">
+                    歡迎來到 <strong>My Site - 電影愛好者誌</strong>。這裡紀錄每部經典作品的運鏡之美、劇本細節與觀影後的獨家體悟。與我們一起沉浸在電影大銀幕的魅力中！
+                </p>
+                <div class="pt-3 flex flex-wrap gap-4">
+                    <a href="#reviews" class="bg-cinema-gold hover:bg-cinema-goldHover text-cinema-bg font-bold py-3 px-7 rounded-xl shadow-lg transition-all flex items-center gap-2 transform hover:scale-105">
+                        <i class="fa-solid fa-play"></i> 探索最新影評
+                    </a>
+                    <button onclick="showPopcornToast()" class="bg-cinema-card hover:bg-cinema-border text-white border border-cinema-border font-bold py-3 px-6 rounded-xl transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-popcorn text-cinema-gold"></i> 領取觀影特餐
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto px-4 py-12 w-full grid grid-cols-1 lg:grid-cols-3 gap-10">
+        
+        <!-- Left 2 Columns: Movie Reviews / Blog Posts -->
+        <section id="reviews" class="lg:col-span-2 space-y-8">
+            <div class="flex items-center justify-between border-b border-cinema-border pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-3 h-8 bg-cinema-gold rounded-full inline-block"></span>
+                    <h2 class="text-2xl font-bold font-heading text-white">最新深度影評 / Latest Reviews</h2>
+                </div>
+                <span class="text-xs text-cinema-muted font-medium">更新於 2026 年 10 月</span>
+            </div>
+
+            <!-- Review 1: Real Movie Camera Scene -->
+            <article class="ticket-card rounded-2xl overflow-hidden flex flex-col md:flex-row">
+                <div class="md:w-2/5 h-60 md:h-auto relative overflow-hidden flex-shrink-0">
+                    <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80" 
+                         alt="Cinematic Camera Setup" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x800/181B22/E5A93C?text=🎬+Review+1';">
+                    <span class="absolute top-3 left-3 bg-black/70 backdrop-blur-md text-cinema-gold text-xs font-bold px-3 py-1 rounded-md border border-cinema-gold/30">
+                        <i class="fa-solid fa-star text-cinema-gold"></i> 9.2 / 10
+                    </span>
+                </div>
+                <div class="p-6 md:w-3/5 flex flex-col justify-between space-y-4">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="cinema-badge">科幻巨作</span>
+                            <time class="text-xs text-cinema-muted"><i class="fa-regular fa-clock"></i> 2026-10-15</time>
+                        </div>
+                        <h3 class="text-xl font-bold text-white hover:text-cinema-gold transition-colors leading-snug">
+                            《星際光影特寫》：探索浩瀚宇宙中的孤獨與人性救贖
+                        </h3>
+                        <p class="text-cinema-muted text-xs md:text-sm leading-relaxed mt-2">
+                            這部作品以絕美的底片攝影與冷冽的音效設計，重新定義了當代科幻電影的視覺標竿。導演透過緊湊的鏡頭語言與光影反差，巧妙勾勒出角色內心的內省與對未知的渴望...
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-cinema-border/60 text-xs">
+                        <span class="text-cinema-muted"><i class="fa-regular fa-eye"></i> 1,420 次瀏覽</span>
+                        <button onclick="readPost(1)" class="text-cinema-gold font-bold hover:underline flex items-center gap-1">
+                            完整影評 <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Review 2: Retro Projector -->
+            <article class="ticket-card rounded-2xl overflow-hidden flex flex-col md:flex-row">
+                <div class="md:w-2/5 h-60 md:h-auto relative overflow-hidden flex-shrink-0">
+                    <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=800&q=80" 
+                         alt="Vintage Film Projector" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x800/181B22/E5A93C?text=🎥+Review+2';">
+                    <span class="absolute top-3 left-3 bg-black/70 backdrop-blur-md text-cinema-gold text-xs font-bold px-3 py-1 rounded-md border border-cinema-gold/30">
+                        <i class="fa-solid fa-star text-cinema-gold"></i> 8.8 / 10
+                    </span>
+                </div>
+                <div class="p-6 md:w-3/5 flex flex-col justify-between space-y-4">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="cinema-badge">復古經典</span>
+                            <time class="text-xs text-cinema-muted"><i class="fa-regular fa-clock"></i> 2026-10-12</time>
+                        </div>
+                        <h3 class="text-xl font-bold text-white hover:text-cinema-gold transition-colors leading-snug">
+                            底片時光的溫柔回響：解析黑白電影的膠捲美學
+                        </h3>
+                        <p class="text-cinema-muted text-xs md:text-sm leading-relaxed mt-2">
+                            在數位特效鋪天蓋地的年代，經典膠捲顆粒帶來的質感依舊不可替代。本篇專題深入探討 35mm 膠捲如何透過微弱的燈光塑造出張力十足的經典場面...
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-cinema-border/60 text-xs">
+                        <span class="text-cinema-muted"><i class="fa-regular fa-eye"></i> 980 次瀏覽</span>
+                        <button onclick="readPost(2)" class="text-cinema-gold font-bold hover:underline flex items-center gap-1">
+                            完整影評 <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Review 3: Movie Clapperboard -->
+            <article class="ticket-card rounded-2xl overflow-hidden flex flex-col md:flex-row">
+                <div class="md:w-2/5 h-60 md:h-auto relative overflow-hidden flex-shrink-0">
+                    <img src="https://images.unsplash.com/photo-1518676599625-5815021d9130?auto=format&fit=crop&w=800&q=80" 
+                         alt="Movie Clapperboard" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x800/181B22/E5A93C?text=🎬+Review+3';">
+                    <span class="absolute top-3 left-3 bg-black/70 backdrop-blur-md text-cinema-gold text-xs font-bold px-3 py-1 rounded-md border border-cinema-gold/30">
+                        <i class="fa-solid fa-star text-cinema-gold"></i> 9.5 / 10
+                    </span>
+                </div>
+                <div class="p-6 md:w-3/5 flex flex-col justify-between space-y-4">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="cinema-badge">導演專題</span>
+                            <time class="text-xs text-cinema-muted"><i class="fa-regular fa-clock"></i> 2026-10-08</time>
+                        </div>
+                        <h3 class="text-xl font-bold text-white hover:text-cinema-gold transition-colors leading-snug">
+                            長鏡頭的藝術：如何在靜止中製造最極致的懸疑感
+                        </h3>
+                        <p class="text-cinema-muted text-xs md:text-sm leading-relaxed mt-2">
+                            沒有剪輯的遮掩，長鏡頭考驗著演員與攝影師的完美配合。本文盤點影史最具代表性的五個長鏡頭，拆解導演如何精準掌控時間與空間的節奏。
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-cinema-border/60 text-xs">
+                        <span class="text-cinema-muted"><i class="fa-regular fa-eye"></i> 2,310 次瀏覽</span>
+                        <button onclick="readPost(3)" class="text-cinema-gold font-bold hover:underline flex items-center gap-1">
+                            完整影評 <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Right 1 Column: Cinema Sidebar -->
+        <aside class="space-y-8">
+            <!-- Movie Reviewer Profile Widget -->
+            <div id="about" class="bg-cinema-card border border-cinema-border rounded-2xl p-6 text-center relative overflow-hidden">
+                <div class="w-24 h-24 mx-auto rounded-full p-1 bg-gradient-to-tr from-cinema-gold to-yellow-100 mb-4 shadow-xl overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" 
+                         alt="Author Avatar" 
+                         class="w-full h-full object-cover rounded-full"
+                         onerror="this.onerror=null; this.src='https://placehold.co/150x150/181B22/E5A93C?text=🍿';">
+                </div>
+                <h3 class="font-bold text-lg text-white font-heading">影迷主筆 / Cinephile</h3>
+                <p class="text-xs text-cinema-gold mt-1 mb-4 font-semibold">「電影是每秒 24 格的真理 ✨」</p>
+                <p class="text-xs text-cinema-muted leading-relaxed text-left bg-cinema-bg p-4 rounded-xl border border-cinema-border">
+                    你好！我是這座電影小屋的站長。熱愛重看 80 年代經典底片、探索獨立影展，並記錄下每一次散場後的感動。
+                </p>
+            </div>
+
+            <!-- Top Watchlist / Recommended Movies -->
+            <div id="watchlist" class="bg-cinema-card border border-cinema-border rounded-2xl p-6">
+                <h3 class="font-bold text-base text-white mb-4 flex items-center gap-2 border-b border-cinema-border pb-3">
+                    <i class="fa-solid fa-film text-cinema-gold"></i> 本月必看推薦榜
+                </h3>
+                <ul class="space-y-4">
+                    <li class="flex items-center gap-3 group cursor-pointer" onclick="showMovieDetail('沙丘：第二部')">
+                        <span class="w-6 h-6 rounded-md bg-cinema-gold text-cinema-bg font-extrabold text-xs flex items-center justify-center">1</span>
+                        <div class="flex-1">
+                            <h4 class="text-xs font-bold text-slate-200 group-hover:text-cinema-gold transition-colors">沙丘：第二部</h4>
+                            <p class="text-[10px] text-cinema-muted">史詩科幻 / 丹尼·維勒納夫</p>
+                        </div>
+                        <span class="text-xs text-cinema-gold font-bold">★ 9.4</span>
+                    </li>
+                    <li class="flex items-center gap-3 group cursor-pointer" onclick="showMovieDetail('奧本海默')">
+                        <span class="w-6 h-6 rounded-md bg-cinema-border text-slate-300 font-extrabold text-xs flex items-center justify-center">2</span>
+                        <div class="flex-1">
+                            <h4 class="text-xs font-bold text-slate-200 group-hover:text-cinema-gold transition-colors">奧本海默</h4>
+                            <p class="text-[10px] text-cinema-muted">傳記歷史 / 克里斯多福·諾蘭</p>
+                        </div>
+                        <span class="text-xs text-cinema-gold font-bold">★ 9.1</span>
+                    </li>
+                    <li class="flex items-center gap-3 group cursor-pointer" onclick="showMovieDetail('蜘蛛人：新宇宙')">
+                        <span class="w-6 h-6 rounded-md bg-cinema-border text-slate-300 font-extrabold text-xs flex items-center justify-center">3</span>
+                        <div class="flex-1">
+                            <h4 class="text-xs font-bold text-slate-200 group-hover:text-cinema-gold transition-colors">蜘蛛人：新宇宙</h4>
+                            <p class="text-[10px] text-cinema-muted">動畫視覺 / 喬伊姆·多斯·桑托斯</p>
+                        </div>
+                        <span class="text-xs text-cinema-gold font-bold">★ 9.0</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Movie Club Interactive Note Box -->
+            <div class="bg-gradient-to-br from-cinema-card to-cinema-bg border border-cinema-border rounded-2xl p-6">
+                <h3 class="font-bold text-sm text-white mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-comments text-cinema-gold"></i> 影迷留言交流板
+                </h3>
+                <p class="text-xs text-cinema-muted mb-3">寫下你最近最心動的電影或觀影心得吧！</p>
+                <textarea id="noteInput" rows="3" class="w-full text-xs p-3 rounded-xl bg-cinema-bg text-slate-200 border border-cinema-border focus:outline-none focus:border-cinema-gold resize-none" placeholder="分享你的電影記憶..."></textarea>
+                <button onclick="submitNote()" class="mt-3 w-full bg-cinema-gold hover:bg-cinema-goldHover text-cinema-bg font-bold text-xs py-2.5 rounded-xl transition-all shadow-md">
+                    送出留言 🍿
+                </button>
+            </div>
+        </aside>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-cinema-card border-t border-cinema-border mt-16 py-8 text-center text-xs text-cinema-muted">
+        <div class="max-w-6xl mx-auto px-4 space-y-3">
+            <div class="flex justify-center items-center gap-2 text-cinema-gold text-lg">
+                <i class="fa-solid fa-ticket"></i>
+                <i class="fa-solid fa-film"></i>
+                <i class="fa-solid fa-video"></i>
+            </div>
+            <p class="font-semibold text-slate-300">
+                &copy; 2026 My Site - Movie Lover Sharing. 版權所有。
+            </p>
+            <p class="text-[11px]">
+                頁面已成功切換至 <code class="bg-cinema-bg px-2 py-0.5 rounded text-cinema-gold border border-cinema-border">Movie Lover Sharing</code> 部落格主題。
+            </p>
+        </div>
+    </footer>
+
+    <!-- Notification Toast Modal -->
+    <div id="toast" class="fixed bottom-6 right-6 hidden bg-cinema-card border border-cinema-gold text-white px-5 py-3 rounded-2xl shadow-2xl z-50 flex items-center gap-3 text-sm font-bold animate-bounce">
+        <span id="toastIcon" class="text-cinema-gold text-lg">🍿</span>
+        <span id="toastMsg">打招呼成功！</span>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Show Toast Notification
+        function showToast(msg, icon = '🍿') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.innerText = msg;
+            toastIcon.innerText = icon;
+            toast.classList.remove('hidden');
+
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        function showPopcornToast() {
+            showToast('已為您準備好爆米花與可樂，享受電影時光吧！✨', '🍿');
+        }
+
+        function showMovieDetail(movieTitle) {
+            showToast(`已將《${movieTitle}》加入您的待看清單！`, '🎬');
+        }
+
+        function readPost(id) {
+            showToast(`正在載入第 ${id} 篇影評的完整內容...`, '📖');
+        }
+
+        function submitNote() {
+            const input = document.getElementById('noteInput');
+            if (input.value.trim() === '') {
+                showToast('請先寫下一些留言想法喔！', '✏️');
+            } else {
+                showToast('感謝您的影迷留言！已成功發表。', '💬');
+                input.value = '';
+            }
+        }
+    </script>
+</body>
+</html>
